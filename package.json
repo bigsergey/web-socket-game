@@ -1,0 +1,46 @@
+{
+  "name": "web-socket-game",
+  "version": "0.0.0",
+  "description": "Simple game using web sockets",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf dist/",
+    "build": "webpack",
+    "production": "webpack -p",
+    "start": "webpack-dev-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bigsergey/web-socket-game.git"
+  },
+  "keywords": [
+    "HTML5",
+    "Web",
+    "API",
+    "WebSockets"
+  ],
+  "author": "Sergey Bolshov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bigsergey/web-socket-game/issues"
+  },
+  "homepage": "https://github.com/bigsergey/web-socket-game#readme",
+  "devDependencies": {
+    "babel-core": "^6.14.0",
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "css-loader": "^0.24.0",
+    "eslint": "^3.16.0",
+    "eslint-config-apptension": "^1.1.1",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "html-webpack-plugin": "^2.22.0",
+    "node-sass": "^3.8.0",
+    "sass-loader": "^4.0.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.15.0"
+  }
+}
