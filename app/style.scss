@@ -5,3 +5,16 @@ body {
   font: 100% $font-stack;
   color: $primary-color;
 }
+
+.container {
+  width: 300px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
+.field {
+  border: 1px solid black;
+  height: 100px;
+  width: 32%;
+}
