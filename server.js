@@ -11,9 +11,21 @@ server = new WebSocketServer({
   })
 });
 
+const simpleData = JSON.stringify({
+  x: 'x',
+  o: 'o'
+});
+
 server.on('request', (request) => {
   const connection = request.accept(null, request.origin);
   log(chalk.yellow(`connections: ${connection.socket.server.connections}`));
+
+  connection.sendUTF('asd');
+  connection.send(simpleData);
+
+  connection.on('message', (data) => {
+    log(chalk.blue(JSON.parse(data.utf8Data)));
+  });
 
   connection.on('close', () => {
     log(chalk.yellow(`connections: ${connection.socket.server.connections}`));
