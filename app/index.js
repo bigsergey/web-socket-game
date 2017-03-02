@@ -37,6 +37,7 @@ connection.onmessage = function (message) {
 
 const fieldsArray = Array.from(Array(9).keys());
 const $container = document.querySelector('#container');
+const $app = document.querySelector('#app');
 
 fieldsArray.forEach(item => {
   $container.insertAdjacentHTML('beforeend', `<div id="${item}" class="field"></div>`)
@@ -47,40 +48,32 @@ fieldsArray.forEach(item => {
 
 const $fields = document.getElementsByClassName('field');
 const firstPlayerMoves = [], secondPlayerMoves = [];
-let isFirstPlayerMove = true, isSecondPlayerMove = false;
+let isFirstPlayerMove = true;
 
 for(let i = 0; i < $fields.length; i++) {
   $fields[i].addEventListener('click', (e) => {
-    if (isFirstPlayerMove) {
-      firstPlayerMoves.push(toNumber(e.target.id));
-      e.target.innerHTML = 'X';
-      isFirstPlayerMove = false;
-      isSecondPlayerMove = true;
-    } else {
-      secondPlayerMoves.push(toNumber(e.target.id));
-      e.target.innerHTML = 'O';
-      isFirstPlayerMove = true;
-      isSecondPlayerMove = false;
+    if (!e.target.innerHTML) {
+      if (isFirstPlayerMove) {
+        firstPlayerMoves.push(toNumber(e.target.id));
+        e.target.innerHTML = 'X';
+        isFirstPlayerMove = false;
+      } else {
+        secondPlayerMoves.push(toNumber(e.target.id));
+        e.target.innerHTML = 'O';
+        isFirstPlayerMove = true;
+      }
     }
 
     console.log(firstPlayerMoves, secondPlayerMoves);
-
     if (GameLogic.checkPlayerMoves(firstPlayerMoves)) {
-      console.log('first player win');
-    } else if (GameLogic.checkPlayerMoves(secondPlayerMoves)) {
-      console.log('second player win');
-    } else {
-      console.log('draw');
+      $app.insertAdjacentHTML('afterbegin', `<div class="overlay">First player won!</div>`);
+    }
+    if (GameLogic.checkPlayerMoves(secondPlayerMoves)) {
+      $app.insertAdjacentHTML('afterbegin', `<div class="overlay">Second player won!</div>`);
+    }
+
+    if (firstPlayerMoves.length + secondPlayerMoves.length === 9 && !GameLogic.checkPlayerMoves(firstPlayerMoves) && !GameLogic.checkPlayerMoves(secondPlayerMoves)) {
+      $app.insertAdjacentHTML('afterbegin', `<div class="overlay">Draw!</div>`);
     }
   })
-}
-
-
-
-
-
-const {x, y, ...z} = {x: 1, y: 2, a: 3, b: 4};
-const n = {x, y, ...z};
-if (Object.keys(n).map((key) => n[key]).reduce((p,v) => p + v) === 10) {
-  document.querySelector('#app').insertAdjacentHTML('afterbegin', '<h1>works.</h1>');
 }

@@ -1,9 +1,14 @@
 $font-stack:    Helvetica, sans-serif;
 $primary-color: #333;
+$secondary-color: #fff;
 
 body {
   font: 100% $font-stack;
   color: $primary-color;
+}
+
+h1 {
+  text-align: center;
 }
 
 #container {
@@ -27,4 +32,19 @@ body {
 .field:hover {
   background-color: rgba(255, 255, 76, 0.3);
   transition: background-color .25s;
+}
+
+.overlay {
+  position: absolute;
+  background-color: $primary-color;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  font-weight: 600;
+  color: $secondary-color;
 }
