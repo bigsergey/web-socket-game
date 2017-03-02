@@ -1,9 +1,13 @@
 import './style.scss';
+import {toNumber} from 'lodash';
+import GameLogic from './gameLogic';
+
+const WEB_SOCKET_ADDRESS = 'ws://127.0.0.1:1337';
 
 // if user is running mozilla then use it's built-in WebSocket
 window.WebSocket = window.WebSocket || window.MozWebSocket;
 
-const connection = new WebSocket('ws://127.0.0.1:1337');
+const connection = new WebSocket(WEB_SOCKET_ADDRESS);
 const simpleMessage = JSON.stringify({a: 'Patryk'});
 
 connection.onopen = function () {
@@ -26,6 +30,54 @@ connection.onmessage = function (message) {
   }
   // handle incoming message
 };
+
+
+
+// ---------- Create Game Board ----------
+
+const fieldsArray = Array.from(Array(9).keys());
+const $container = document.querySelector('#container');
+
+fieldsArray.forEach(item => {
+  $container.insertAdjacentHTML('beforeend', `<div id="${item}" class="field"></div>`)
+});
+
+
+// ---------- Game ----------
+
+const $fields = document.getElementsByClassName('field');
+const firstPlayerMoves = [], secondPlayerMoves = [];
+let isFirstPlayerMove = true, isSecondPlayerMove = false;
+
+for(let i = 0; i < $fields.length; i++) {
+  $fields[i].addEventListener('click', (e) => {
+    if (isFirstPlayerMove) {
+      firstPlayerMoves.push(toNumber(e.target.id));
+      e.target.innerHTML = 'X';
+      isFirstPlayerMove = false;
+      isSecondPlayerMove = true;
+    } else {
+      secondPlayerMoves.push(toNumber(e.target.id));
+      e.target.innerHTML = 'O';
+      isFirstPlayerMove = true;
+      isSecondPlayerMove = false;
+    }
+
+    console.log(firstPlayerMoves, secondPlayerMoves);
+
+    if (GameLogic.checkPlayerMoves(firstPlayerMoves)) {
+      console.log('first player win');
+    } else if (GameLogic.checkPlayerMoves(secondPlayerMoves)) {
+      console.log('second player win');
+    } else {
+      console.log('draw');
+    }
+  })
+}
+
+
+
+
 
 const {x, y, ...z} = {x: 1, y: 2, a: 3, b: 4};
 const n = {x, y, ...z};

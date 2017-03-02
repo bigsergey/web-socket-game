@@ -16,9 +16,13 @@ const simpleData = JSON.stringify({
   o: 'o'
 });
 
+let connectionsCounter = 0;
+
 server.on('request', (request) => {
   const connection = request.accept(null, request.origin);
-  log(chalk.yellow(`connections: ${connection.socket.server.connections}`));
+  connectionsCounter++;
+
+  log(chalk.yellow(`connections: ${connectionsCounter}`));
 
   connection.sendUTF('asd');
   connection.send(simpleData);
@@ -28,6 +32,7 @@ server.on('request', (request) => {
   });
 
   connection.on('close', () => {
-    log(chalk.yellow(`connections: ${connection.socket.server.connections}`));
+    connectionsCounter--;
+    log(chalk.yellow(`connections: ${connectionsCounter}`));
   });
 });
