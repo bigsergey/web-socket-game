@@ -37,6 +37,7 @@
     "eslint-config-apptension": "^1.1.1",
     "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^2.22.0",
+    "lodash": "^4.17.4",
     "node-sass": "^3.8.0",
     "sass-loader": "^4.0.0",
     "style-loader": "^0.13.1",
@@ -45,7 +46,6 @@
   },
   "dependencies": {
     "chalk": "^1.1.3",
-    "lodash": "^4.17.4",
-    "websocket": "^1.0.24"
+    "ws": "^2.2.0"
   }
 }
