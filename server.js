@@ -1,29 +1,32 @@
 const webSocketsServerPort = 1337;
 const WebSocketServer = require('ws').Server;
 const http = require('http');
-const {intersection} = require('lodash');
 const chalk = require('chalk');
 const log = console.log;
 
+const FIRST_PLAYER_SYMBOL = 'X';
+const SECOND_PLAYER_SYMBOL = 'O';
 
 server = new WebSocketServer({port: webSocketsServerPort}, () => {
   log(chalk.green(`Server is listening on port: ${webSocketsServerPort}`));
 });
 
 let connectionsCounter = 0;
-let playerOne = {
+const playerOne = {
   'id': 1,
   'isPlayerMove': true,
   'playerMoves': [],
   'opponentMoves': [],
-  'playerSymbol': 'X',
+  'playerSymbol': FIRST_PLAYER_SYMBOL,
+  'opponentSymbol': SECOND_PLAYER_SYMBOL,
 };
-let playerTwo = {
+const playerTwo = {
   'id': 2,
   'isPlayerMove': false,
   'playerMoves': [],
   'opponentMoves': [],
-  'playerSymbol': 'O',
+  'playerSymbol': SECOND_PLAYER_SYMBOL,
+  'opponentSymbol': FIRST_PLAYER_SYMBOL,
 };
 
 server.on('connection', (ws) => {
@@ -39,32 +42,32 @@ server.on('connection', (ws) => {
     }
   });
 
-  ws.on('message', (msg) => {
-    log(chalk.blue(msg));
-    if (msg['id'] === 1) {
+  ws.on('message', (data) => {
+    const gameInfo = JSON.parse(data);
+    if (gameInfo.id === 1) {
       server.clients.forEach(client => {
         if (client._ultron.id === 1) {
-          playerOne.isPlayerMove = msg['isPlayerMove'];
-          playerOne.playerMoves = msg['playerMoves'];
+          playerOne.isPlayerMove = gameInfo.isPlayerMove;
+          playerOne.playerMoves = gameInfo.playerMoves;
           client.send(JSON.stringify(playerOne));
         }
         if (client._ultron.id === 2) {
-          playerTwo.isPlayerMove = !msg['isPlayerMove'];
-          playerTwo.playerMoves = msg['opponentMoves'];
+          playerTwo.isPlayerMove = !gameInfo.isPlayerMove;
+          playerTwo.opponentMoves = gameInfo.playerMoves;
           client.send(JSON.stringify(playerTwo));
         }
       });
     }
-    if (msg['id'] === 2) {
+    if (gameInfo.id === 2) {
       server.clients.forEach(client => {
         if (client._ultron.id === 1) {
-          playerOne.isPlayerMove = !msg['isPlayerMove'];
-          playerOne.playerMoves = msg['opponentMoves'];
+          playerOne.isPlayerMove = !gameInfo.isPlayerMove;
+          playerOne.opponentMoves = gameInfo.playerMoves;
           client.send(JSON.stringify(playerOne));
         }
         if (client._ultron.id === 2) {
-          playerTwo.isPlayerMove = msg['isPlayerMove'];
-          playerTwo.playerMoves = msg['playerMoves'];
+          playerTwo.isPlayerMove = gameInfo.isPlayerMove;
+          playerTwo.playerMoves = gameInfo.playerMoves;
           client.send(JSON.stringify(playerTwo));
         }
       });

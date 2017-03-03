@@ -1,5 +1,5 @@
 import './style.scss';
-import {toNumber} from 'lodash';
+import {toNumber, last} from 'lodash';
 import GameLogic from './gameLogic';
 
 const WEB_SOCKET_ADDRESS = 'ws://127.0.0.1:1337';
@@ -36,14 +36,14 @@ let gameInfo = null;
 const $fields = document.getElementsByClassName('field');
 
 const drawOpponentMoves = (opponentMoves) => {
-  console.log(opponentMoves);
+  const opponentLastMove = last(opponentMoves);
+  $container.children[opponentLastMove].innerHTML = gameInfo.opponentSymbol;
 };
 
 
 connection.onmessage = (message) => {
   try {
-    const json = JSON.parse(message.data);
-    gameInfo = json;
+    gameInfo = JSON.parse(message.data);
     drawOpponentMoves(gameInfo.opponentMoves);
   } catch (e) {
     console.log('This doesn\'t look like a valid JSON: ', message.data);
@@ -53,7 +53,6 @@ connection.onmessage = (message) => {
 
 for(let i = 0; i < $fields.length; i++) {
   $fields[i].addEventListener('click', (e) => {
-    console.log(gameInfo);
     if (!e.target.innerHTML) {
       if (gameInfo.isPlayerMove) {
         gameInfo.playerMoves.push(toNumber(e.target.id));
