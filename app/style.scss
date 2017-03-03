@@ -34,7 +34,7 @@ h1 {
   transition: background-color .25s;
 }
 
-.overlay {
+.overlay, .start-view {
   position: absolute;
   background-color: $primary-color;
   top: 0;
