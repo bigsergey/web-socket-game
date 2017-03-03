@@ -2,7 +2,8 @@ import './style.scss';
 import {toNumber} from 'lodash';
 import GameLogic from './gameLogic';
 
-const WEB_SOCKET_ADDRESS = 'ws://127.0.0.1:1337';
+console.log(window.location);
+const WEB_SOCKET_ADDRESS = `ws://${window.location.hostname}:1337`;
 
 // if user is running mozilla then use it's built-in WebSocket
 window.WebSocket = window.WebSocket || window.MozWebSocket;

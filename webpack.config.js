@@ -10,7 +10,7 @@ var HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 var ExtractTextPluginConfig = new ExtractTextPlugin('style.css');
 
 var entrypoint = process.env.npm_lifecycle_event === 'dev' ?
-  'webpack-dev-server/client?http://localhost:8080' :
+  'webpack-dev-server/client?http://0.0.0.0:8080' :
   './app/index.js';
 
 module.exports = {
