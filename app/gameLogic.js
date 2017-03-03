@@ -1,4 +1,4 @@
-import {intersection} from 'lodash';
+import {intersection, last} from 'lodash';
 
 /*
 * Tic Tac Toe's array
@@ -33,6 +33,33 @@ class gameLogic {
     });
 
     return isMatch;
+  }
+
+  checkGameResult(playerOneMoves, playerTwoMoves, $app) {
+    if (this.checkPlayerMoves(playerOneMoves)) {
+      $app.insertAdjacentHTML('afterbegin', `<div class="overlay">You won!</div>`);
+    }
+    if (this.checkPlayerMoves(playerTwoMoves)) {
+      $app.insertAdjacentHTML('afterbegin', `<div class="overlay">You lost</div>`);
+    }
+
+    if (playerOneMoves.length + playerTwoMoves.length === 9 && !this.checkPlayerMoves(playerOneMoves) && !this.checkPlayerMoves(playerTwoMoves)) {
+      $app.insertAdjacentHTML('afterbegin', `<div class="overlay">Draw!</div>`);
+    }
+  }
+
+  drawOpponentMoves(opponentMoves, opponentSymbol, $container) {
+    const opponentLastMove = last(opponentMoves);
+    $container.children[opponentLastMove].innerHTML = opponentSymbol;
+  }
+
+  drawBoardGame($container) {
+    const numberOfFields = 9;
+    const fieldsArray = Array.from(Array(numberOfFields).keys());
+
+    fieldsArray.forEach(item => {
+      $container.insertAdjacentHTML('beforeend', `<div id="${item}" class="field"></div>`)
+    });
   }
 }
 
