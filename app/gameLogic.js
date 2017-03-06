@@ -48,9 +48,16 @@ class gameLogic {
     }
   }
 
+  checkGameStatus(gameInfo, $app, $container) {
+    this.drawOpponentMoves(gameInfo.opponentMoves, gameInfo.opponentSymbol, $container);
+    this.checkGameResult(gameInfo.playerMoves, gameInfo.opponentMoves, $app);
+  }
+
   drawOpponentMoves(opponentMoves, opponentSymbol, $container) {
     const opponentLastMove = last(opponentMoves);
-    $container.children[opponentLastMove].innerHTML = opponentSymbol;
+    if (opponentMoves.length) {
+      $container.children[opponentLastMove].innerHTML = opponentSymbol;
+    }
   }
 
   drawBoardGame($container) {
@@ -60,6 +67,10 @@ class gameLogic {
     fieldsArray.forEach(item => {
       $container.insertAdjacentHTML('beforeend', `<div id="${item}" class="field"></div>`)
     });
+  }
+
+  hideWaitingOverlay($waitingOverlay) {
+    $waitingOverlay.style = "display: none";
   }
 }
 

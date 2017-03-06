@@ -3,10 +3,13 @@ const WebSocketServer = require('ws').Server;
 const http = require('http');
 const chalk = require('chalk');
 const log = console.log;
-const {remove, drop} = require('lodash');
+const {remove} = require('lodash');
 
 const FIRST_PLAYER_SYMBOL = 'X';
 const SECOND_PLAYER_SYMBOL = 'O';
+
+const GAME_INFO = 'GAME_INFO';
+const TOGGLE_WAITING_OVERLAY = 'TOGGLE_WAITING_OVERLAY';
 
 server = new WebSocketServer({port: webSocketsServerPort}, () => {
   log(chalk.green(`Server is listening on port: ${webSocketsServerPort}`));
@@ -15,6 +18,7 @@ server = new WebSocketServer({port: webSocketsServerPort}, () => {
 
 let clientsArray = [];
 const playerOne = {
+  'type': GAME_INFO,
   'id': 0,
   'isPlayerMove': true,
   'playerMoves': [],
@@ -24,6 +28,7 @@ const playerOne = {
   'waitingForOtherPlayer': true,
 };
 const playerTwo = {
+  'type': GAME_INFO,
   'id': 0,
   'isPlayerMove': false,
   'playerMoves': [],
@@ -44,6 +49,12 @@ server.on('connection', (ws) => {
   if (clientsArray[1]) {
     playerTwo.id = clientsArray[1]._ultron.id;
     clientsArray[1].send(JSON.stringify(playerTwo));
+  }
+
+  if (clientsArray.length >= 2) {
+    clientsArray.forEach(client => {
+      client.send(JSON.stringify({'type' : TOGGLE_WAITING_OVERLAY}))
+    })
   }
 
   ws.on('message', (data) => {

@@ -2,8 +2,10 @@ import './style.scss';
 import {toNumber} from 'lodash';
 import GameLogic from './gameLogic';
 
-console.log(window.location);
+const GAME_INFO = 'GAME_INFO';
+const TOGGLE_WAITING_OVERLAY = 'TOGGLE_WAITING_OVERLAY';
 const WEB_SOCKET_ADDRESS = `ws://${window.location.hostname}:1337`;
+
 
 // if user is running mozilla then use it's built-in WebSocket
 window.WebSocket = window.WebSocket || window.MozWebSocket;
@@ -22,8 +24,9 @@ connection.onerror = function (error) {
 
 // ---------- Create Game Board ----------
 
-const $container = document.querySelector('#container');
 const $app = document.querySelector('#app');
+const $waitingOverlay = document.querySelector('#waiting-overlay');
+const $container = document.querySelector('#container');
 
 GameLogic.drawBoardGame($container);
 
@@ -33,14 +36,19 @@ GameLogic.drawBoardGame($container);
 let gameInfo = null;
 const $fields = document.getElementsByClassName('field');
 
+
 connection.onmessage = (message) => {
   try {
-    gameInfo = JSON.parse(message.data);
-    GameLogic.drawOpponentMoves(gameInfo.opponentMoves, gameInfo.opponentSymbol, $container);
-    GameLogic.checkGameResult(gameInfo.playerMoves, gameInfo.opponentMoves, $app);
+    if (JSON.parse(message.data).type === GAME_INFO) {
+      gameInfo = JSON.parse(message.data);
+      GameLogic.checkGameStatus(gameInfo, $app, $container)
+    }
+    if (JSON.parse(message.data).type === TOGGLE_WAITING_OVERLAY) {
+      GameLogic.hideWaitingOverlay($waitingOverlay)
+    }
   } catch (e) {
-    console.log('This doesn\'t look like a valid JSON: ', message.data);
-    return;
+    console.log(message.data);
+    return null;
   }
 };
 
