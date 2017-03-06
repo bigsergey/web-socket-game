@@ -34,7 +34,7 @@ h1 {
   transition: background-color .25s;
 }
 
-.overlay, #waiting-overlay {
+#overlay, #waiting-overlay {
   position: absolute;
   background-color: $primary-color;
   top: 0;
@@ -47,4 +47,8 @@ h1 {
   font-size: 40px;
   font-weight: 600;
   color: $secondary-color;
+}
+
+#overlay {
+  display: none;
 }

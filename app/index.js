@@ -38,7 +38,7 @@ const addEventListenersOnGameBoard = () => {
 
 // ---------- Create Game Board ----------
 
-const $app = document.querySelector('#app');
+const $overlay = document.querySelector('#overlay');
 const $waitingOverlay = document.querySelector('#waiting-overlay');
 const $container = document.querySelector('#container');
 const $fields = document.getElementsByClassName('field');
@@ -54,10 +54,11 @@ connection.onmessage = (message) => {
   try {
     gameInfo = JSON.parse(message.data);
     if (!gameInfo.opponentMoves.length && !gameInfo.playerMoves.length) {
+      $overlay.style = 'display: none';
       GameLogic.resetBoard($container);
       addEventListenersOnGameBoard();
     }
-    GameLogic.checkGameStatus(gameInfo, $app, $container);
+    GameLogic.checkGameStatus(gameInfo, $overlay, $container);
     GameLogic.toggleWaitingOverlay(gameInfo.waitingForOtherPlayer, $waitingOverlay);
   } catch (e) {
     console.log(message.data);

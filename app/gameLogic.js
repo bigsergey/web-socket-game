@@ -35,23 +35,28 @@ class gameLogic {
     return isMatch;
   }
 
-  checkGameResult(playerOneMoves, playerTwoMoves, $app) {
-    console.log(`playerOneMoves: ${playerOneMoves}, playerTwoMoves: ${playerTwoMoves}`);
+  checkGameResult(playerOneMoves, playerTwoMoves, $overlay) {
+    $overlay.innerHTML = '';
+
     if (this.checkPlayerMoves(playerOneMoves) && playerTwoMoves.length) {
-      $app.insertAdjacentHTML('afterbegin', `<div class="overlay">You won!</div>`);
+      $overlay.style = 'display: flex';
+      $overlay.innerHTML = 'You won!';
     }
+
     if (this.checkPlayerMoves(playerTwoMoves) && playerOneMoves.length) {
-      $app.insertAdjacentHTML('afterbegin', `<div class="overlay">You lost</div>`);
+      $overlay.style = 'display: flex';
+      $overlay.innerHTML = 'You lost..';
     }
 
     if (playerOneMoves.length + playerTwoMoves.length === 9 && !this.checkPlayerMoves(playerOneMoves) && !this.checkPlayerMoves(playerTwoMoves)) {
-      $app.insertAdjacentHTML('afterbegin', `<div class="overlay">Draw!</div>`);
+      $overlay.style = 'display: flex';
+      $overlay.innerHTML = 'Draw';
     }
   }
 
-  checkGameStatus(gameInfo, $app, $container) {
+  checkGameStatus(gameInfo, $overlay, $container) {
     this.drawOpponentMoves(gameInfo.opponentMoves, gameInfo.opponentSymbol, $container);
-    this.checkGameResult(gameInfo.playerMoves, gameInfo.opponentMoves, $app);
+    this.checkGameResult(gameInfo.playerMoves, gameInfo.opponentMoves, $overlay);
   }
 
   drawOpponentMoves(opponentMoves, opponentSymbol, $container) {
