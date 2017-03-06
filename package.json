@@ -8,7 +8,8 @@
     "clean": "rm -rf dist/",
     "build": "webpack",
     "production": "webpack -p",
-    "start": "webpack-dev-server --host 0.0.0.0 --port 8080"
+    "start-server": "NODE_PATH=$NODE_PATH:./src node server",
+    "start": "webpack-dev-server --host 0.0.0.0 --port 8080 & npm run start-server"
   },
   "repository": {
     "type": "git",
