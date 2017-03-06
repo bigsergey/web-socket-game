@@ -38,6 +38,12 @@ const playerTwo = {
   'waitingForOtherPlayer': true,
 };
 
+const resetPlayerDetails = (player) => {
+  player.playerMoves = [];
+  player.opponentMoves = [];
+  player.waitingForOtherPlayer = true;
+};
+
 server.on('connection', (ws) => {
   clientsArray.push(ws);
   log(chalk.yellow(`connections: ${clientsArray.length}`));
@@ -51,10 +57,11 @@ server.on('connection', (ws) => {
     clientsArray[1].send(JSON.stringify(playerTwo));
   }
 
-  if (clientsArray.length >= 2) {
-    clientsArray.forEach(client => {
-      client.send(JSON.stringify({'type' : TOGGLE_WAITING_OVERLAY}))
-    })
+  if (clientsArray.length >= 2 && !playerOne.playerMoves.length && !playerTwo.playerMoves.length) {
+    playerOne.waitingForOtherPlayer = false;
+    playerTwo.waitingForOtherPlayer = false;
+    clientsArray[0].send(JSON.stringify(playerOne));
+    clientsArray[1].send(JSON.stringify(playerTwo));
   }
 
   ws.on('message', (data) => {
@@ -89,6 +96,9 @@ server.on('connection', (ws) => {
     clientsArray = remove(clientsArray, client => {
       return client._ultron;
     });
+    resetPlayerDetails(playerOne);
+    resetPlayerDetails(playerTwo);
+    clientsArray[0].send(JSON.stringify(playerOne));
     log(chalk.yellow(`connections: ${clientsArray.length}`));
   });
 });

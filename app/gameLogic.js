@@ -36,10 +36,11 @@ class gameLogic {
   }
 
   checkGameResult(playerOneMoves, playerTwoMoves, $app) {
-    if (this.checkPlayerMoves(playerOneMoves)) {
+    console.log(`playerOneMoves: ${playerOneMoves}, playerTwoMoves: ${playerTwoMoves}`);
+    if (this.checkPlayerMoves(playerOneMoves) && playerTwoMoves.length) {
       $app.insertAdjacentHTML('afterbegin', `<div class="overlay">You won!</div>`);
     }
-    if (this.checkPlayerMoves(playerTwoMoves)) {
+    if (this.checkPlayerMoves(playerTwoMoves) && playerOneMoves.length) {
       $app.insertAdjacentHTML('afterbegin', `<div class="overlay">You lost</div>`);
     }
 
@@ -69,8 +70,16 @@ class gameLogic {
     });
   }
 
-  hideWaitingOverlay($waitingOverlay) {
-    $waitingOverlay.style = "display: none";
+  resetBoard($container) {
+    while($container.firstChild){
+      $container.removeChild($container.firstChild);
+    }
+
+    this.drawBoardGame($container);
+  }
+
+  toggleWaitingOverlay(displayOverlay, $waitingOverlay) {
+    displayOverlay ? $waitingOverlay.style = "display: flex" : $waitingOverlay.style = "display: none";
   }
 }
 
