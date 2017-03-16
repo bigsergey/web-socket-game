@@ -35,28 +35,45 @@ class gameLogic {
     return isMatch;
   }
 
-  checkGameResult(playerOneMoves, playerTwoMoves, $overlay) {
-    $overlay.innerHTML = '';
+  checkGameResult(playerOneMoves, playerTwoMoves, $overlay, $overlayText) {
+
+    const video = document.getElementById('video');
+    const mp4 = document.getElementById('mp4');
+
+    $overlayText.innerHTML = '';
 
     if (this.checkPlayerMoves(playerOneMoves) && playerTwoMoves.length) {
       $overlay.style = 'display: flex';
-      $overlay.innerHTML = 'You won!';
+      $overlayText.innerHTML = 'You won!';
+
+      mp4.src = 'http://media.w3.org/2010/05/bunny/movie.ogv';
+      video.load();
+      video.play();
     }
 
     if (this.checkPlayerMoves(playerTwoMoves) && playerOneMoves.length) {
       $overlay.style = 'display: flex';
-      $overlay.innerHTML = 'You lost..';
+      $overlayText.innerHTML = 'You lost..';
+      mp4.src = 'http://media.w3.org/2010/05/bunny/movie.ogv';
+
+      video.load();
+      video.play();
     }
 
     if (playerOneMoves.length + playerTwoMoves.length === 9 && !this.checkPlayerMoves(playerOneMoves) && !this.checkPlayerMoves(playerTwoMoves)) {
       $overlay.style = 'display: flex';
-      $overlay.innerHTML = 'Draw';
+      $overlayText.innerHTML = 'Draw';
+      mp4.src = 'http://media.w3.org/2010/05/bunny/movie.ogv';
+
+      video.load();
+      video.play();
     }
+
   }
 
-  checkGameStatus(gameInfo, $overlay, $container) {
+  checkGameStatus(gameInfo, $overlay, $container, $overlayText) {
     this.drawOpponentMoves(gameInfo.opponentMoves, gameInfo.opponentSymbol, $container);
-    this.checkGameResult(gameInfo.playerMoves, gameInfo.opponentMoves, $overlay);
+    this.checkGameResult(gameInfo.playerMoves, gameInfo.opponentMoves, $overlay, $overlayText);
   }
 
   drawOpponentMoves(opponentMoves, opponentSymbol, $container) {
